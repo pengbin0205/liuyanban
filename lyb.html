@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>留言板</title>
+</head>
+<body>
+<div id="app">
+<!--    双向绑定 为了拿取输入框的值1-->
+    <input type="text" v-model="msg">
+    <input type="button" value="添加到留言板中" @click="addNote">
+    <ul>
+        <li v-for="(value, index) in notebook" :key="index">
+<!--        展示每一条留言板内容    -->
+            <span>{{ value }}</span><a href="javascript:;" @click="delNote(index)">删除</a>
+        </li>
+    </ul>
+<!--    v-show 控制是否展示-->
+    <span v-show="notebook.length!=0">总共:{{ notebook.length }}条</span>
+    <input type="button" value="删除所有留言" @click="delAll" v-show="notebook.length!=0"></input>
+</div>
+
+
+
+<script src="js/vue.min.js"></script>
+
+<script>
+    new Vue({
+            el: "#app",
+            data: {
+                notebook: [],
+                //将输入框与msg绑定在一起 既可以接收到输入值  双向绑定1
+                msg: "",
+            },
+            methods: {
+                // 添加留言,实现输入到添加过程
+                addNote() {
+                    // 只能获取到vue实例中的数据
+                    let msg = this.msg;
+                    // 判断是否为空 为空不可添加
+                    if (msg) {
+                        // 将输入的添加到留言版的首行 unshift 既首行
+                        this.notebook.unshift(this.msg);
+                        // 即不用手动删除输入框中的值 清空留言板
+                        this.msg = "";
+                    }
+                },
+                //删除留言
+                delNote(index) {
+                    // 根据下标删除数组中的某个元素，1代表一下删几个
+                    this.notebook.splice(index, 1)
+                },
+                //一键删所有
+                delAll(){
+                    this.notebook = [];
+                },
+            }
+        })
+</script>
+</body>
+</html>
